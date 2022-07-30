@@ -8,7 +8,7 @@ const app = express();
 const admin = require("./routes/admin");
 const path = require("path");
 const mongoose = require("mongoose");
-const sessao = require("express-session");
+const session = require("express-session");
 const flash = require("connect-flash");
 const { use } = require("./routes/admin");
 require("./models/Postagens");
@@ -17,15 +17,19 @@ require("./models/Categoria");
 const Categoria = mongoose.model("categorias");
 const usuarios = require("./routes/usuario") ;
 const passport = require("passport");
-require("./config/auth")(passport);
+ require("./config/auth")(passport);
+
 //configurações
 //Sessao
-app.use(sessao ({
+app.use(session ({
   secret:"cursonode",  
   resave:true,
-  saveUninitialized:true
-}));
-app.use(passport.initialize() );
+  saveUninitialized:true,
+  cookie:{
+maxAge: 3*60*1000
+  }}
+));
+app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
@@ -33,6 +37,8 @@ app.use(flash());
 app.use( (req, res, next) =>{
 res.locals.success_msg =  req.flash("success_msg");
 res.locals.error_msg = req.flash("error_msg");
+res.locals.error = req.flash("error");
+res.locals.user = req.user || null;
 next();
 })
   //Body Parser

@@ -7,27 +7,33 @@ require("../models/Usuario");
 const Usuario = mongoose.model("usuarios");
 
 module.exports = function(passport){
-passport.use(new localStrategy({usernameField: "email"}, (email, senha ,done) =>{
-   Usuario.findOne( {email: email}).then((usuarios) =>{
-if(!usuarios){
-   return done(null, false, {message: "Está conta não existe!"});
-}
-bcrypt.compare(senha, usuarios.senha, (erro, batem) =>{
-   if(batem){
-return done(null, user);
-   }else{
-      return done(null, false, {message: "Senha incorreta"});
+   passport.use(new localStrategy(
+      { usernameField: 'email' ,
+   passwordField: 'senha',
+      failureFlash:true},  ( email, senha , done) =>{
+   
+      Usuario.findOne( {email: email}).then((usuario) =>{
+   if(!usuario){
+      return done(null, false, {message: "Está conta não existe!"});
    }
-})
+   
+   bcrypt.compare(senha , usuario.senha, (erro, batem) =>{
+      if(batem){
+   return done(null , usuario, {message: "Seja bem-vindo"});
+      }else{
+         return done(null , false, {message: "Senha incorreta"});
+      }})
    })
-}))
+   }));
+   
+passport.serializeUser((usuario, done) => {
+   done(null, usuario._id);
+});
 
-passport.serializeUser((usuario, done) =>{
-   done(null, usuario.id);
-})
-passport.deserializeUser((id, done)=>{
-User.findById((id, (err, usuario) =>{
-done(err, user);
-}))
-})
+passport.deserializeUser(function(id, done) {
+   Usuario.findById(id, function(err, Usuario) {
+       done(err, Usuario);
+   })})
 }
+
+
