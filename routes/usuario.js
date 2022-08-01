@@ -80,14 +80,15 @@ router.get("/login", (req, res) =>{
       failureFlash: true
   }), (req, res) => {
       res.redirect('/');
-      console.log("entrou na rota")
   }
   );
 
-   router.get("/logout", (req, res) =>{
-   req.logout();
-   req.flash("success_msg", "Deslogado com sucesso! ")
-   res.redirect("/");
+   router.get('/logout', function(req, res, next) {
+      req.logout(function(err) {
+        if (err) { return next(err); }
+        req.flash("success_msg", "Deslogado com sucesso! ")
+        res.redirect('/');
+    });
 })
 
 module.exports = router;
