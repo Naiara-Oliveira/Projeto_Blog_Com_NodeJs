@@ -5,8 +5,7 @@
 # Dependências 📋 Pré-requisitos
 
 # npm install --save express
-## O Express é um framework incrível e possui diversas características que facilitam o desenvolvimento de nossas aplicações. Dentre suas principais características, podemos citar:
-
+#### O Express é um framework incrível e possui diversas características que facilitam o desenvolvimento de nossas aplicações. Dentre suas principais características, podemos citar:
 #### Possui um sistema de rotas completo;
 #### Possibilita o tratamento de exceções dentro da aplicação;
 #### Permite a integração de vários sistemas de templates que facilitam a criação de páginas web para suas aplicações;
